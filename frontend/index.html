@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Route Planning Engine</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 30px;
+            white-space: pre-wrap;
+            background: #f4f4f4;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Route Planning Engine for Lonavla</h1>
+
+    <label for="source">Source</label>
+
+    <select id="source">
+        <option value="">Select source</option>
+    </select>
+
+
+    <label for="destination">Destination</label>
+
+    <select id="destination">
+        <option value="">Select destination</option>
+    </select>
+
+
+    <button onclick="findRoute()">Find Route</button>
+
+    <pre id="result"></pre>
+
+
+    <script>
+
+        const places = {
+
+            "Lonavala Railway Station": [18.7546, 73.4062],
+
+            "Lonavala Market": [18.7500, 73.4050],
+
+            "Sunil's Celebrity Wax Museum": [18.75255, 73.40267],
+
+            "Ryewood Park": [18.7485, 73.4010],
+
+            "Lonavala Lake": [18.7410, 73.4060],
+
+            "Tungarli Lake": [18.7390, 73.3940],
+
+            "Valvan Dam": [18.7560, 73.4170],
+
+            "Valvan Lake": [18.7540, 73.4160],
+
+            "Bhushi Dam": [18.72270, 73.39650],
+
+            "Lion's Point": [18.6780, 73.4780],
+
+            "Tiger's Leap": [18.7390, 73.4970],
+
+            "Rajmachi Point": [18.7280, 73.4740],
+
+            "Amrutanjan Point": [18.7310, 73.3830],
+
+            "Khandala": [18.7580, 73.3760],
+
+            "Kune Falls": [18.7530, 73.3700],
+
+            "Duke's Nose": [18.7370, 73.3500],
+
+            "Rajmachi Fort": [18.8330, 73.3950],
+
+            "Lohagad Fort": [18.70726, 73.477829],
+
+            "Bhaja Caves": [18.7170, 73.4730],
+
+            "Karla Caves": [18.78374, 73.47032],
+
+            "Ekvira Temple": [18.7870, 73.4710],
+
+            "Visapur Fort": [18.7190, 73.4900],
+
+            "Malavli Railway Station": [18.7290, 73.4780],
+
+            "Pawna Lake": [18.6730, 73.5100],
+
+            "Shooting Point": [18.7580, 73.3770]
+        };
+
+
+        const sourceSelect =
+            document.getElementById("source");
+
+        const destinationSelect =
+            document.getElementById("destination");
+
+
+        // Add places to both dropdowns
+
+        for (const place in places) {
+
+            const sourceOption =
+                document.createElement("option");
+
+            sourceOption.value = place;
+            sourceOption.textContent = place;
+
+            sourceSelect.appendChild(sourceOption);
+
+
+            const destinationOption =
+                document.createElement("option");
+
+            destinationOption.value = place;
+            destinationOption.textContent = place;
+
+            destinationSelect.appendChild(destinationOption);
+        }
+
+
+        async function findRoute() {
+
+            const sourceName =
+                sourceSelect.value;
+
+            const destinationName =
+                destinationSelect.value;
+
+
+            if (!sourceName || !destinationName) {
+
+                document.getElementById("result").textContent =
+                    "Please select both source and destination.";
+
+                return;
+            }
+
+
+            if (sourceName === destinationName) {
+
+                document.getElementById("result").textContent =
+                    "Source and destination must be different.";
+
+                return;
+            }
+
+
+            const [sourceLat, sourceLon] =
+                places[sourceName];
+
+            const [destinationLat, destinationLon] =
+                places[destinationName];
+
+
+            const url =
+                `http://127.0.0.1:5000/route` +
+                `?source_lat=${sourceLat}` +
+                `&source_lon=${sourceLon}` +
+                `&destination_lat=${destinationLat}` +
+                `&destination_lon=${destinationLon}`;
+
+
+            document.getElementById("result").textContent =
+                "Calculating route...";
+
+
+            try {
+
+                const response =
+                    await fetch(url);
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    document.getElementById("result").textContent =
+                        data.message || data.error || "Route calculation failed.";
+
+                    return;
+                }
+
+
+                const route = data.astar;
+
+const path = route.path;
+
+const pathDisplay =
+    path.length > 12
+        ? path.slice(0, 6).join(" → ") +
+          " → ... → " +
+          path.slice(-6).join(" → ")
+        : path.join(" → ");
+
+
+document.getElementById("result").innerHTML = `
+
+    <h2>Route Result</h2>
+
+    <table>
+        <tr>
+            <th>Source</th>
+            <td>${sourceName}</td>
+        </tr>
+
+        <tr>
+            <th>Destination</th>
+            <td>${destinationName}</td>
+        </tr>
+
+        <tr>
+            <th>Shortest Distance</th>
+            <td><strong>${route.distance_km.toFixed(3)} km</strong></td>
+        </tr>
+
+        <tr>
+            <th>Route Length</th>
+            <td>${path.length} nodes</td>
+        </tr>
+    </table>
+
+
+    <h2>Computed Path (road nodes)</h2>
+
+    <div class="path">
+        ${pathDisplay}
+    </div>
+
+
+    <h2>Algorithm Comparison</h2>
+
+    <table>
+
+        <tr>
+            <th>Metric</th>
+            <th>Dijkstra</th>
+            <th>A*</th>
+        </tr>
+
+        <tr>
+            <td>Distance</td>
+            <td>${data.dijkstra.distance_km.toFixed(5)} km</td>
+            <td>${data.astar.distance_km.toFixed(5)} km</td>
+        </tr>
+
+        <tr>
+            <td>Nodes Explored</td>
+            <td>${data.dijkstra.nodes_explored}</td>
+            <td><strong>${data.astar.nodes_explored}</strong></td>
+        </tr>
+
+        <tr>
+            <td>Execution Time</td>
+            <td>${data.dijkstra.execution_time_ms.toFixed(4)} ms</td>
+            <td><strong>${data.astar.execution_time_ms.toFixed(4)} ms</strong></td>
+        </tr>
+
+    </table>
+`;
+
+            }
+
+            catch (error) {
+
+                document.getElementById("result").textContent =
+                    "Could not connect to the Flask backend.\n\n" +
+                    "Make sure backend/app.py is running.";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
