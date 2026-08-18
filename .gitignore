@@ -1,19 +1,19 @@
 cat > .gitignore << 'EOF'
-# CMake build files
+
 build/
 
-# Cache / generated files
+
 cache/
 
-# Python cache
+
 __pycache__/
 *.pyc
 
-# IDE/editor files
+
 .vscode/
 .idea/
 
-# OS files
+
 .DS_Store
 Thumbs.db
 EOF
