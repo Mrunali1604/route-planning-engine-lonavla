@@ -17,7 +17,7 @@ node_id_map = {
 
 print(f"Loaded {len(node_id_map)} nodes")
 
-# ---------------- Nodes ----------------
+
 
 with open(NODES_FILE, "w", newline="") as file:
     writer = csv.writer(file)
@@ -39,7 +39,7 @@ with open(NODES_FILE, "w", newline="") as file:
             data["x"]
         ])
 
-# ---------------- Edges ----------------
+
 
 with open(EDGES_FILE, "w", newline="") as file:
     writer = csv.writer(file)
