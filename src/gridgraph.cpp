@@ -6,18 +6,18 @@ Graph createGridGraph(int rows, int columns) {
 
     Graph graph(totalNodes);
 
-    // Starting coordinate: approximately Mumbai
+    
     double startLatitude = 19.0760;
     double startLongitude = 72.8777;
 
-    // Approximate spacing between neighboring nodes
+    
     double latitudeStep = 0.01;
     double longitudeStep = 0.01;
 
     std::mt19937 generator(42);
     std::uniform_real_distribution<double> variation(0.9, 1.1);
 
-    // Assign coordinates
+   
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < columns; col++) {
 
@@ -37,13 +37,13 @@ Graph createGridGraph(int rows, int columns) {
         }
     }
 
-    // Add roads between neighboring nodes
+    
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < columns; col++) {
 
             int current = row * columns + col;
 
-            // Right neighbor
+            
             if (col + 1 < columns) {
                 int right = row * columns + (col + 1);
 
@@ -53,7 +53,7 @@ Graph createGridGraph(int rows, int columns) {
                 graph.addEdge(right, current, weight);
             }
 
-            // Bottom neighbor
+           
             if (row + 1 < rows) {
                 int bottom = (row + 1) * columns + col;
 
