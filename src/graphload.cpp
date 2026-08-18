@@ -18,10 +18,10 @@ Graph loadGraphFromCSV(
 
     std::string line;
 
-    // Skip header
+    
     std::getline(nodeFile, line);
 
-    // Read number of nodes from the file
+    
     int numNodes = 0;
 
     while (std::getline(nodeFile, line)) {
@@ -34,10 +34,10 @@ Graph loadGraphFromCSV(
 
     Graph graph(numNodes);
 
-    // Re-open nodes file
+    
     nodeFile.open(nodesFile);
 
-    // Skip header
+    
     std::getline(nodeFile, line);
 
     while (std::getline(nodeFile, line)) {
@@ -70,7 +70,7 @@ Graph loadGraphFromCSV(
 
     nodeFile.close();
 
-    // ---------------- Edges ----------------
+    
 
     std::ifstream edgeFile(edgesFile);
 
@@ -80,7 +80,7 @@ Graph loadGraphFromCSV(
         );
     }
 
-    // Skip header
+   
     std::getline(edgeFile, line);
 
     while (std::getline(edgeFile, line)) {
