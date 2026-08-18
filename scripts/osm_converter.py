@@ -9,7 +9,7 @@ print("Loading OSM graph...")
 
 graph = ox.load_graphml(INPUT_FILE)
 
-# Map OSM node IDs to compact integer IDs: 0, 1, 2, ...
+
 node_id_map = {
     osm_id: index
     for index, osm_id in enumerate(graph.nodes)
@@ -52,10 +52,10 @@ with open(EDGES_FILE, "w", newline="") as file:
 
     for source, destination, data in graph.edges(data=True):
 
-        # GraphML stores OSMnx edge length in meters
+       
         distance_meters = float(data["length"])
 
-        # Convert to kilometers
+        
         distance_km = distance_meters / 1000.0
 
         writer.writerow([
