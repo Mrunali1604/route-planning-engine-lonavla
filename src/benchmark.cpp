@@ -52,7 +52,7 @@ void runBenchmark(
             continue;
         }
 
-        // ---------------- Dijkstra ----------------
+       
 
         auto dijkstraStart =
             std::chrono::high_resolution_clock::now();
@@ -68,7 +68,7 @@ void runBenchmark(
                 dijkstraEnd - dijkstraStart
             ).count();
 
-        // ---------------- A* ----------------
+        
 
         auto aStarStart =
             std::chrono::high_resolution_clock::now();
@@ -84,7 +84,7 @@ void runBenchmark(
                 aStarEnd - aStarStart
             ).count();
 
-        // Skip unreachable routes
+        
         if (dijkstraResult.path.empty() ||
             aStarResult.path.empty()) {
             i--;
@@ -138,7 +138,7 @@ void runBenchmark(
                   << "\n";
     }
 
-    // ---------------- Summary ----------------
+    
 
     std::cout << "\n=== Benchmark Summary ===\n\n";
 
