@@ -47,9 +47,7 @@ int main(int argc, char* argv[]) {
               << graph.getNumNodes()
               << "\n\n";
 
-    // --------------------------------------------------
-    // Get source and destination coordinates
-    // --------------------------------------------------
+    
 
     double sourceLatitude;
     double sourceLongitude;
@@ -91,7 +89,6 @@ int main(int argc, char* argv[]) {
               << destination << "\n\n";
 
 
-    // ---------------- Dijkstra ----------------
 
     auto dijkstraStart =
         std::chrono::high_resolution_clock::now();
@@ -126,7 +123,7 @@ int main(int argc, char* argv[]) {
               << " ms\n\n";
 
 
-    // ---------------- A* ----------------
+
 
     auto aStarStart =
         std::chrono::high_resolution_clock::now();
@@ -162,10 +159,6 @@ int main(int argc, char* argv[]) {
 
     printPathCSV(aStarResult.path);
 
-
-    // --------------------------------------------------
-    // Benchmark only when no coordinates were provided
-    // --------------------------------------------------
 
     if (argc != 5) {
         runBenchmark(graph, 100);
