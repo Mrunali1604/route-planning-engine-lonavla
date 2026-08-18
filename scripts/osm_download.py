@@ -2,7 +2,7 @@ import osmnx as ox
 
 print("Downloading road network...")
 
-# Bounding box around Lonavala
+
 north = 18.78
 south = 18.70
 east = 73.48
